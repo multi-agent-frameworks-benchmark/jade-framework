@@ -1,13 +1,6 @@
 package com.jade;
 
-/**
- * Hello world!
- *
- */
-public class App 
+public class App
 {
-    public static void main( String[] args )
-    {
-        System.out.println( "Hello Hello!" );
-    }
+    public static void main( String[] args ){}
 }

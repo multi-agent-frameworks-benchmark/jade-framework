@@ -27,9 +27,10 @@
                 <version>3.1.0</version>
                 <configuration>
                     <archive>
-                        <manifest>
-                            <mainClass>com.jade.App</mainClass>
-                        </manifest>
+                        <manifestEntries>
+                            <Main-Class>com.jade.App</Main-Class>
+                            <Agent-Class>com.jade.HelloWorldAgent</Agent-Class>
+                        </manifestEntries>
                     </archive>
                 </configuration>
             </plugin>
@@ -43,6 +44,10 @@
             <version>4.13.2</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>net.sf.ingenias</groupId>
+            <artifactId>jade</artifactId>
+            <version>4.3</version>
+        </dependency>
     </dependencies>
-
 </project>
