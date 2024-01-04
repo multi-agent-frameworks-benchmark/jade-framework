@@ -26,7 +26,8 @@ public class HelloWorldAgentTest {
 
     private AgentContainer container;
 
-    @Param({"1", "2", "5", "10", "50", "100"})
+//    @Param({"1", "2", "5", "10", "50", "100"})
+    @Param({"1", "3"})
     private int numberOfAgentsCreated;
 
     public void setup() {
