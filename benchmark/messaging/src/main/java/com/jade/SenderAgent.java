@@ -9,7 +9,13 @@ public class SenderAgent extends Agent {
 
     @Override
     protected void setup() {
+        doDelete();
         addBehaviour(new SenderBehaviour());
+    }
+
+    @Override
+    protected void takeDown() {
+
     }
 
     private class SenderBehaviour extends CyclicBehaviour {
@@ -23,6 +29,21 @@ public class SenderAgent extends Agent {
             ACLMessage reply = receive();
             if (reply != null) {
                 value = Integer.parseInt(reply.getContent());
+
+                System.out.println("Agent " + myAgent.getLocalName() + " received: " + value);
+
+                if (value >= 100) {
+                    System.out.println("Agent " + myAgent.getLocalName() + " reached 100. Notifying CounterAgent to terminate...");
+
+                    // Wysyłamy komunikat informujący o zakończeniu
+                    ACLMessage terminateMsg = new ACLMessage(ACLMessage.INFORM);
+                    terminateMsg.addReceiver(getAID("CounterAgent"));
+                    terminateMsg.setContent("terminate");
+                    send(terminateMsg);
+
+                    // Teraz możemy zakończyć agenta
+                    myAgent.doDelete();
+                }
             } else {
                 block();
             }

@@ -35,19 +35,4 @@
             </plugin>
         </plugins>
     </build>
-
-    <dependencies>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.13.2</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>net.sf.ingenias</groupId>
-            <artifactId>jade</artifactId>
-            <version>4.3</version>
-        </dependency>
-    </dependencies>
-
 </project>
