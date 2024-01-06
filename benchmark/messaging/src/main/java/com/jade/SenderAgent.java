@@ -9,7 +9,6 @@ public class SenderAgent extends Agent {
 
     @Override
     protected void setup() {
-        doDelete();
         addBehaviour(new SenderBehaviour());
     }
 

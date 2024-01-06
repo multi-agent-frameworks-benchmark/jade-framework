@@ -9,7 +9,6 @@ public class CounterAgent extends Agent {
 
     @Override
     protected void setup() {
-        doDelete();
         addBehaviour(new CounterBehaviour());
     }
 
