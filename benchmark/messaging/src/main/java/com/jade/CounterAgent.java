@@ -27,13 +27,13 @@ public class CounterAgent extends Agent {
 
                     System.out.println("Agent " + myAgent.getLocalName() + " received: " + receivedValue);
 
-                    if (receivedValue <= 100) {
+                    if (receivedValue <= 1000) {
                         ACLMessage reply = new ACLMessage(ACLMessage.INFORM);
                         reply.addReceiver(msg.getSender());
                         reply.setContent(Integer.toString(receivedValue));
                         send(reply);
                     } else {
-                        System.out.println("Agent " + myAgent.getLocalName() + " reached 100. Notifying SenderAgent to terminate...");
+                        System.out.println("Agent " + myAgent.getLocalName() + " reached 1000. Notifying SenderAgent to terminate...");
 
                         // Wysyłamy komunikat informujący o zakończeniu
                         ACLMessage terminateMsg = new ACLMessage(ACLMessage.INFORM);

@@ -31,8 +31,8 @@ public class SenderAgent extends Agent {
 
                 System.out.println("Agent " + myAgent.getLocalName() + " received: " + value);
 
-                if (value >= 100) {
-                    System.out.println("Agent " + myAgent.getLocalName() + " reached 100. Notifying CounterAgent to terminate...");
+                if (value >= 1000) {
+                    System.out.println("Agent " + myAgent.getLocalName() + " reached 10000. Notifying CounterAgent to terminate...");
 
                     // Wysyłamy komunikat informujący o zakończeniu
                     ACLMessage terminateMsg = new ACLMessage(ACLMessage.INFORM);

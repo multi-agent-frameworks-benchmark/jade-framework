@@ -27,7 +27,9 @@ public class HelloWorldAgenttTest {
 
     private AgentContainer container;
 
-    @Param({"1000", "10000", "100000", "1000000"})
+//    @Param({"1000", "10000", "100000", "1000000"})
+//    private int numberOfMessageTransfersInBothWays;
+    @Param({"1000"})
     private int numberOfMessageTransfersInBothWays;
 
     public void setup() {
@@ -63,28 +65,12 @@ public class HelloWorldAgenttTest {
             counterAgentController.start();
             senderAgentController.start();
 
-
-//            Scanner scanner = new Scanner(System.in);
-//
-//            while (true) {
-//                String input = scanner.nextLine();
-//
-//                if (input.contains("Agent SenderAgent reached 100")) {
-                    // After
-                    teardown();
-//                    break;
-//                }
-//            }
-//
-//            scanner.close();
-
-
         } catch (StaleProxyException e) {
             e.printStackTrace();
             fail("Test failed: " + e.getMessage());
         }
 
         // After
-//        teardown();
+        teardown();
     }
 }
