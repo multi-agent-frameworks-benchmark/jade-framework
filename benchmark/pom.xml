@@ -11,6 +11,7 @@
   <modules>
     <module>hello</module>
     <module>messaging</module>
+    <module>contract-net-protocol</module>
   </modules>
 
   <dependencies>
@@ -28,7 +29,7 @@
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter</artifactId>
-      <version>RELEASE</version>
+      <version>5.10.1</version>
       <scope>test</scope>
     </dependency>
     <dependency>
