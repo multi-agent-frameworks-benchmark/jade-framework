@@ -1,51 +1,43 @@
-package com.jade;
+package com.jade.benchmark;
 
+import com.jade.system.CounterAgent;
+import com.jade.system.SenderAgent;
 import jade.core.Profile;
 import jade.core.ProfileImpl;
 import jade.core.Runtime;
 import jade.wrapper.AgentContainer;
 import jade.wrapper.AgentController;
 import jade.wrapper.StaleProxyException;
-import org.junit.Test;
-import org.openjdk.jmh.annotations.Benchmark;
-import org.openjdk.jmh.annotations.BenchmarkMode;
-import org.openjdk.jmh.annotations.Fork;
-import org.openjdk.jmh.annotations.Measurement;
-import org.openjdk.jmh.annotations.Mode;
-import org.openjdk.jmh.annotations.OutputTimeUnit;
-import org.openjdk.jmh.annotations.Param;
-import org.openjdk.jmh.annotations.Scope;
-import org.openjdk.jmh.annotations.State;
+import org.openjdk.jmh.annotations.*;
 
-import java.util.Scanner;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-import static org.junit.Assert.fail;
 
 @State(Scope.Thread)
 public class HelloWorldAgenttTest {
 
     private AgentContainer container;
+    private CountDownLatch agentsFinishedLatch;
 
-//    @Param({"1000", "10000", "100000", "1000000"})
-//    private int numberOfMessageTransfersInBothWays;
-    @Param({"1000"})
+//    @Param({"1000", "10000", "100000", "1000000"}) -- If you have strong CPU
+    @Param({"1000", "2000", "3000", "4000"})
     private int numberOfMessageTransfersInBothWays;
 
     public void setup() {
         Runtime runtime = Runtime.instance();
         Profile profile = new ProfileImpl();
         container = runtime.createMainContainer(profile);
+        agentsFinishedLatch = new CountDownLatch(2);
     }
 
     public void teardown() {
         try {
-            Thread.sleep(2000);
+            agentsFinishedLatch.await();
+            Thread.sleep(1000);
             container.kill();
-        } catch (StaleProxyException e) {
+        } catch (StaleProxyException | InterruptedException e) {
             e.printStackTrace();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
         }
     }
 
@@ -54,20 +46,22 @@ public class HelloWorldAgenttTest {
     @Measurement(iterations = 1)
     @Fork(value = 1)
     @OutputTimeUnit(TimeUnit.SECONDS)
-    @Test
     public void testHelloWorldAgent() {
         // Before
         setup();
 
         try {
-            AgentController counterAgentController = container.createNewAgent("CounterAgent", CounterAgent.class.getName(), null);
-            AgentController senderAgentController = container.createNewAgent("SenderAgent", SenderAgent.class.getName(), null);
+            CounterAgent counterAgent = new CounterAgent(agentsFinishedLatch, numberOfMessageTransfersInBothWays);
+            SenderAgent senderAgent = new SenderAgent(agentsFinishedLatch, numberOfMessageTransfersInBothWays);
+
+            AgentController counterAgentController = container.acceptNewAgent("CounterAgent", counterAgent);
+            AgentController senderAgentController = container.acceptNewAgent("SenderAgent", senderAgent);
+
             counterAgentController.start();
             senderAgentController.start();
 
         } catch (StaleProxyException e) {
             e.printStackTrace();
-            fail("Test failed: " + e.getMessage());
         }
 
         // After

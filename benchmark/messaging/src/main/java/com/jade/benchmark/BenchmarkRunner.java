@@ -1,4 +1,4 @@
-package com.jade;
+package com.jade.benchmark;
 
 import org.openjdk.jmh.results.format.ResultFormatType;
 import org.openjdk.jmh.runner.Runner;
@@ -15,7 +15,6 @@ public class BenchmarkRunner {
                 .include(HelloWorldAgenttTest.class.getSimpleName())
                 .output(dateRun + "-benchmark-result-hello.txt")
                 .resultFormat(ResultFormatType.TEXT)
-                .forks(4)
                 .build();
 
         new Runner(options).run();

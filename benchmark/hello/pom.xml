@@ -29,7 +29,7 @@
                     <archive>
                         <manifestEntries>
                             <Main-Class>com.jade.App</Main-Class>
-                            <Agent-Class>com.jade.HelloWorldAgent</Agent-Class>
+                            <Agent-Class>com.jade.system.HelloWorldAgent</Agent-Class>
                         </manifestEntries>
                     </archive>
                 </configuration>
