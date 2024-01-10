@@ -10,7 +10,6 @@ public class CounterAgent extends Agent {
 
     private final CountDownLatch agentsFinishedLatch;
     private final int receiveValueLimit;
-    private int value = 0;
 
     public CounterAgent(CountDownLatch agentsFinishedLatch, int receivedValueLimit) {
         this.agentsFinishedLatch = agentsFinishedLatch;

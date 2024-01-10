@@ -12,8 +12,8 @@ public class BenchmarkRunner {
         String dateRun = new SimpleDateFormat("yyyy.MM.dd.HH.mm").format(new java.util.Date());
 
         Options options = new OptionsBuilder()
-                .include(CallForProposalsTest.class.getSimpleName())
-                .output(dateRun + "-benchmark-result-hello.txt")
+                .include(CallForProposalsBenchmarkPath.class.getSimpleName())
+                .output(dateRun + "-benchmark-result-contract-net-protocol.txt")
                 .resultFormat(ResultFormatType.TEXT)
                 .build();
 

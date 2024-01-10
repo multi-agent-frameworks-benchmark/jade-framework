@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
 
 
 @State(Scope.Thread)
-public class HelloWorldAgenttTest {
+public class MessagingBenchmarkPath {
 
     private AgentContainer container;
     private CountDownLatch agentsFinishedLatch;

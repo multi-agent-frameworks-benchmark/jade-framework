@@ -12,7 +12,7 @@ import org.openjdk.jmh.annotations.*;
 import java.util.concurrent.TimeUnit;
 
 @State(Scope.Thread)
-public class HelloWorldAgentTest {
+public class HelloWorldBenchmarkPath {
 
     private AgentContainer container;
 

@@ -1,4 +1,4 @@
-package com.jade.benchmark;
+package com.jade.system;
 
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;

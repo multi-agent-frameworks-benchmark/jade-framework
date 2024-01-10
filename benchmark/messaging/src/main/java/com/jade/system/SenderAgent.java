@@ -7,8 +7,11 @@ import jade.lang.acl.ACLMessage;
 import java.util.concurrent.CountDownLatch;
 
 public class SenderAgent extends Agent {
+
     private final CountDownLatch agentsFinishedLatch;
+
     private final int receiveValueLimit;
+
     private int value = 0;
 
     public SenderAgent(CountDownLatch agentsFinishedLatch, int receiveValueLimit) {

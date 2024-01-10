@@ -12,7 +12,7 @@ public class BenchmarkRunner {
         String dateRun = new SimpleDateFormat("yyyy.MM.dd.HH.mm").format(new java.util.Date());
 
         Options options = new OptionsBuilder()
-                .include(HelloWorldAgentTest.class.getSimpleName())
+                .include(HelloWorldBenchmarkPath.class.getSimpleName())
                 .output(dateRun + "-benchmark-result-hello.txt")
                 .resultFormat(ResultFormatType.TEXT)
                 .build();

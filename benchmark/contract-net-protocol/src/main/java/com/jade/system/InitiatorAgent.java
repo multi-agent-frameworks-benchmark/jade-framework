@@ -1,4 +1,4 @@
-package com.jade.benchmark;
+package com.jade.system;
 
 import jade.core.AID;
 import jade.core.Agent;
@@ -7,7 +7,6 @@ import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 
 import java.util.Set;
-import java.util.concurrent.CountDownLatch;
 
 public class InitiatorAgent extends Agent {
 

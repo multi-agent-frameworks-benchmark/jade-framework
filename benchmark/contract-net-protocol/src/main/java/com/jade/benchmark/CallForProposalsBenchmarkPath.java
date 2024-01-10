@@ -1,5 +1,7 @@
 package com.jade.benchmark;
 
+import com.jade.system.ContractorAgent;
+import com.jade.system.InitiatorAgent;
 import jade.core.Profile;
 import jade.core.ProfileImpl;
 import jade.core.Runtime;
@@ -16,13 +18,13 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 @State(Scope.Thread)
-public class CallForProposalsTest {
+public class CallForProposalsBenchmarkPath {
 
     private AgentContainer container;
     private CountDownLatch agentsFinishedLatch;
 
-//    @Param({"1", "2", "3", "4"})
-    @Param({"2", "2", "3", "4"})
+//    @Param({"1", "2", "5", "10", "50", "100", "1000", "10000}) -- If you have strong PC
+    @Param({"1", "2", "4"})
     private int numberOfContractorsAgentsInStarTopology;
 
     public void setup() {
@@ -47,7 +49,7 @@ public class CallForProposalsTest {
     @Measurement(iterations = 1)
     @Fork(value = 1)
     @OutputTimeUnit(TimeUnit.SECONDS)
-    public void testCallForProposal() {
+    public void callForProposalBenchmarkPath() {
         // Before
         setup();
 
