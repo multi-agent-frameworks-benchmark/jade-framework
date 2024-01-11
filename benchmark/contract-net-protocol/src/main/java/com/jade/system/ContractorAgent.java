@@ -18,7 +18,10 @@ public class ContractorAgent extends Agent {
     @Override
     protected void setup() {
         System.out.println("Contractor Agent " + getAID().getName() + " is ready.");
+        addCyclicBehaviour();
+    }
 
+    private void addCyclicBehaviour() {
         addBehaviour(new CyclicBehaviour(this) {
             @Override
             public void action() {
@@ -26,13 +29,17 @@ public class ContractorAgent extends Agent {
                 ACLMessage msg = receive(mt);
 
                 if (msg != null) {
-                    System.out.println("Agent " + this.getAgent().getName() +
-                            " - Received proposal from " + msg.getSender().getName());
-                    agentsFinishedLatch.countDown();
+                    handleProposal(msg, this.getAgent().getName());
                 } else {
                     block();
                 }
             }
         });
+    }
+
+    private void handleProposal(ACLMessage msg, String agentName) {
+        System.out.println("Agent " + agentName + " - Received proposal from "
+                + msg.getSender().getName());
+        agentsFinishedLatch.countDown();
     }
 }

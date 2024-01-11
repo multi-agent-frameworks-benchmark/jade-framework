@@ -20,12 +20,14 @@ public class HelloWorldBenchmarkPath {
     @Param({"1", "3"})
     private int numberOfAgentsCreated;
 
+    @Setup
     public void setup() {
         Runtime runtime = Runtime.instance();
         Profile profile = new ProfileImpl();
         container = runtime.createMainContainer(profile);
     }
 
+    @TearDown
     public void teardown() {
         try {
             container.kill();
@@ -40,20 +42,15 @@ public class HelloWorldBenchmarkPath {
     @Fork(value = 4)
     @OutputTimeUnit(TimeUnit.SECONDS)
     public void testHelloWorldAgent() {
-        // Before
-        setup();
-
         for (int i = 0; i < numberOfAgentsCreated; i++) {
             createHelloWorldAgent(i);
         }
-
-        // After
-        teardown();
     }
 
     private void createHelloWorldAgent(int agentIndex) {
         try {
-            AgentController agentController = container.createNewAgent("helloAgent" + agentIndex, HelloWorldAgent.class.getName(), null);
+            AgentController agentController = container.createNewAgent(
+                    "helloAgent" + agentIndex, HelloWorldAgent.class.getName(), null);
             agentController.start();
         } catch (StaleProxyException e) {
             e.printStackTrace();

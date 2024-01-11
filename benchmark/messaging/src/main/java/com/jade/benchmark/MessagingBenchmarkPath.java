@@ -21,9 +21,10 @@ public class MessagingBenchmarkPath {
     private CountDownLatch agentsFinishedLatch;
 
 //    @Param({"1000", "10000", "100000", "1000000"}) -- If you have strong CPU
-    @Param({"1000", "2000", "3000", "4000"})
+    @Param({"1000", "2000"})
     private int numberOfMessageTransfersInBothWays;
 
+    @Setup
     public void setup() {
         Runtime runtime = Runtime.instance();
         Profile profile = new ProfileImpl();
@@ -31,10 +32,10 @@ public class MessagingBenchmarkPath {
         agentsFinishedLatch = new CountDownLatch(2);
     }
 
+    @TearDown
     public void teardown() {
         try {
             agentsFinishedLatch.await();
-            Thread.sleep(1000);
             container.kill();
         } catch (StaleProxyException | InterruptedException e) {
             e.printStackTrace();
@@ -47,15 +48,16 @@ public class MessagingBenchmarkPath {
     @Fork(value = 1)
     @OutputTimeUnit(TimeUnit.SECONDS)
     public void testHelloWorldAgent() {
-        // Before
-        setup();
-
         try {
-            CounterAgent counterAgent = new CounterAgent(agentsFinishedLatch, numberOfMessageTransfersInBothWays);
-            SenderAgent senderAgent = new SenderAgent(agentsFinishedLatch, numberOfMessageTransfersInBothWays);
+            CounterAgent counterAgent =
+                    new CounterAgent(agentsFinishedLatch, numberOfMessageTransfersInBothWays);
+            SenderAgent senderAgent =
+                    new SenderAgent(agentsFinishedLatch, numberOfMessageTransfersInBothWays);
 
-            AgentController counterAgentController = container.acceptNewAgent("CounterAgent", counterAgent);
-            AgentController senderAgentController = container.acceptNewAgent("SenderAgent", senderAgent);
+            AgentController counterAgentController = container.acceptNewAgent(
+                    "CounterAgent", counterAgent);
+            AgentController senderAgentController = container.acceptNewAgent(
+                    "SenderAgent", senderAgent);
 
             counterAgentController.start();
             senderAgentController.start();
@@ -63,8 +65,5 @@ public class MessagingBenchmarkPath {
         } catch (StaleProxyException e) {
             e.printStackTrace();
         }
-
-        // After
-        teardown();
     }
 }

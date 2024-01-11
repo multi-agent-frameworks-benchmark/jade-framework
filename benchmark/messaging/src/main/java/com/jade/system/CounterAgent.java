@@ -26,36 +26,56 @@ public class CounterAgent extends Agent {
         public void action() {
             ACLMessage msg = receive();
             if (msg != null) {
-                if ("terminate".equals(msg.getContent())) {
-                    System.out.println("Agent " + myAgent.getLocalName() + " received termination signal. Terminating...");
-                    myAgent.doDelete();
-                    agentsFinishedLatch.countDown();
-                } else {
-                    int receivedValue = Integer.parseInt(msg.getContent());
-                    receivedValue++;
-
-                    System.out.println("Agent " + myAgent.getLocalName() + " received: " + receivedValue);
-
-                    if (receivedValue <= receiveValueLimit) {
-                        ACLMessage reply = new ACLMessage(ACLMessage.INFORM);
-                        reply.addReceiver(msg.getSender());
-                        reply.setContent(Integer.toString(receivedValue));
-                        send(reply);
-                    } else {
-                        System.out.println("Agent " + myAgent.getLocalName() + " reached " + receiveValueLimit + ". Notifying SenderAgent to terminate...");
-
-                        ACLMessage terminateMsg = new ACLMessage(ACLMessage.INFORM);
-                        terminateMsg.addReceiver(msg.getSender());
-                        terminateMsg.setContent("terminate");
-                        send(terminateMsg);
-
-                        myAgent.doDelete();
-                        agentsFinishedLatch.countDown();
-                    }
-                }
+                processMessage(msg);
             } else {
                 block();
             }
+        }
+
+        private void processMessage(ACLMessage msg) {
+            if ("terminate".equals(msg.getContent())) {
+                handleTermination();
+            } else {
+                handleIncrementValue(msg);
+            }
+        }
+
+        private void handleTermination() {
+            System.out.println("Agent " + myAgent.getLocalName() + " received termination signal. Terminating...");
+            myAgent.doDelete();
+            agentsFinishedLatch.countDown();
+        }
+
+        private void handleIncrementValue(ACLMessage msg) {
+            int receivedValue = Integer.parseInt(msg.getContent());
+            receivedValue++;
+
+            System.out.println("Agent " + myAgent.getLocalName() + " received: " + receivedValue);
+
+            if (receivedValue <= receiveValueLimit) {
+                sendIncrementedValue(msg, receivedValue);
+            } else {
+                handleValueLimitReached(msg);
+            }
+        }
+
+        private void sendIncrementedValue(ACLMessage msg, int receivedValue) {
+            ACLMessage reply = new ACLMessage(ACLMessage.INFORM);
+            reply.addReceiver(msg.getSender());
+            reply.setContent(Integer.toString(receivedValue));
+            send(reply);
+        }
+
+        private void handleValueLimitReached(ACLMessage msg) {
+            System.out.println("Agent " + myAgent.getLocalName() + " reached " + receiveValueLimit + ". Notifying SenderAgent to terminate...");
+
+            ACLMessage terminateMsg = new ACLMessage(ACLMessage.INFORM);
+            terminateMsg.addReceiver(msg.getSender());
+            terminateMsg.setContent("terminate");
+            send(terminateMsg);
+
+            myAgent.doDelete();
+            agentsFinishedLatch.countDown();
         }
     }
 }

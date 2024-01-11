@@ -8,7 +8,17 @@ import jade.core.Runtime;
 import jade.wrapper.AgentContainer;
 import jade.wrapper.AgentController;
 import jade.wrapper.StaleProxyException;
-import org.openjdk.jmh.annotations.*;
+import org.openjdk.jmh.annotations.Benchmark;
+import org.openjdk.jmh.annotations.BenchmarkMode;
+import org.openjdk.jmh.annotations.Fork;
+import org.openjdk.jmh.annotations.Measurement;
+import org.openjdk.jmh.annotations.Mode;
+import org.openjdk.jmh.annotations.OutputTimeUnit;
+import org.openjdk.jmh.annotations.Param;
+import org.openjdk.jmh.annotations.Scope;
+import org.openjdk.jmh.annotations.Setup;
+import org.openjdk.jmh.annotations.State;
+import org.openjdk.jmh.annotations.TearDown;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,6 +37,7 @@ public class CallForProposalsBenchmarkPath {
     @Param({"1", "2", "4"})
     private int numberOfContractorsAgentsInStarTopology;
 
+    @Setup
     public void setup() {
         Runtime runtime = Runtime.instance();
         Profile profile = new ProfileImpl();
@@ -34,10 +45,10 @@ public class CallForProposalsBenchmarkPath {
         agentsFinishedLatch = new CountDownLatch(numberOfContractorsAgentsInStarTopology);
     }
 
+    @TearDown
     public void teardown() {
         try {
             agentsFinishedLatch.await();
-            Thread.sleep(1000);
             container.kill();
         } catch (StaleProxyException | InterruptedException e) {
             e.printStackTrace();
@@ -47,46 +58,50 @@ public class CallForProposalsBenchmarkPath {
     @Benchmark
     @BenchmarkMode(Mode.SingleShotTime)
     @Measurement(iterations = 1)
-    @Fork(value = 1)
+    @Fork(value = 4)
     @OutputTimeUnit(TimeUnit.SECONDS)
     public void callForProposalBenchmarkPath() {
-        // Before
-        setup();
-
         try {
-            Map<String, ContractorAgent> contractors = new HashMap<>();
-            for (int i = 1; i <= numberOfContractorsAgentsInStarTopology; i++) {
-                contractors.put("Contractor" + i, new ContractorAgent(agentsFinishedLatch));
-            }
+            Map<String, ContractorAgent> contractors = createContractors();
             InitiatorAgent initiator = new InitiatorAgent(contractors.keySet());
 
-
-            List<AgentController> contractorControllers = new ArrayList<>();
-            contractors.forEach((contractorName, contractor) -> {
-                try {
-                    contractorControllers.add(container.acceptNewAgent(contractorName, contractor));
-                } catch (StaleProxyException e) {
-                    throw new RuntimeException(e);
-                }
-            });
+            List<AgentController> contractorControllers = createContractorControllers(contractors);
             AgentController initiatorAgentController = container.acceptNewAgent("Initiator", initiator);
 
-
-            contractorControllers.forEach(contractorController -> {
-                try {
-                    contractorController.start();
-                } catch (StaleProxyException e) {
-                    throw new RuntimeException(e);
-                }
-            });
+            startAgentControllers(contractorControllers);
             initiatorAgentController.start();
-
         } catch (StaleProxyException e) {
             e.printStackTrace();
         }
+    }
 
-        // After
-        teardown();
+    private Map<String, ContractorAgent> createContractors() {
+        Map<String, ContractorAgent> contractors = new HashMap<>();
+        for (int i = 1; i <= numberOfContractorsAgentsInStarTopology; i++) {
+            contractors.put("Contractor" + i, new ContractorAgent(agentsFinishedLatch));
+        }
+        return contractors;
+    }
+
+    private List<AgentController> createContractorControllers(Map<String, ContractorAgent> contractors) {
+        List<AgentController> contractorControllers = new ArrayList<>();
+        contractors.forEach((contractorName, contractor) -> {
+            try {
+                contractorControllers.add(container.acceptNewAgent(contractorName, contractor));
+            } catch (StaleProxyException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        return contractorControllers;
+    }
+
+    private void startAgentControllers(List<AgentController> agentControllers) {
+        agentControllers.forEach(agentController -> {
+            try {
+                agentController.start();
+            } catch (StaleProxyException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 }
-

@@ -31,33 +31,50 @@ public class SenderAgent extends Agent {
     }
 
     private class SenderBehaviour extends CyclicBehaviour {
+
         @Override
         public void action() {
+            sendUpdateMessage();
+            ACLMessage reply = receive();
+            processReply(reply);
+        }
+
+        private void sendUpdateMessage() {
             ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
             msg.addReceiver(getAID("CounterAgent"));
             msg.setContent(Integer.toString(value));
             send(msg);
+        }
 
-            ACLMessage reply = receive();
+        private void processReply(ACLMessage reply) {
             if (reply != null) {
-                value = Integer.parseInt(reply.getContent());
-
-                System.out.println("Agent " + myAgent.getLocalName() + " received: " + value);
-
-                if (value >= receiveValueLimit) {
-                    System.out.println("Agent " + myAgent.getLocalName() + " reached " + receiveValueLimit + ". Notifying CounterAgent to terminate...");
-
-                    ACLMessage terminateMsg = new ACLMessage(ACLMessage.INFORM);
-                    terminateMsg.addReceiver(getAID("CounterAgent"));
-                    terminateMsg.setContent("terminate");
-                    send(terminateMsg);
-
-                    myAgent.doDelete();
-                    agentsFinishedLatch.countDown();
-                }
+                handleReceivedMessage(reply);
             } else {
                 block();
             }
+        }
+
+        private void handleReceivedMessage(ACLMessage reply) {
+            value = Integer.parseInt(reply.getContent());
+
+            System.out.println("Agent " + myAgent.getLocalName() + " received: " + value);
+
+            if (value >= receiveValueLimit) {
+                handleValueLimitReached();
+            }
+        }
+
+        private void handleValueLimitReached() {
+            System.out.println("Agent " + myAgent.getLocalName() + " reached " +
+                    receiveValueLimit + ". Notifying CounterAgent to terminate...");
+
+            ACLMessage terminateMsg = new ACLMessage(ACLMessage.INFORM);
+            terminateMsg.addReceiver(getAID("CounterAgent"));
+            terminateMsg.setContent("terminate");
+            send(terminateMsg);
+
+            myAgent.doDelete();
+            agentsFinishedLatch.countDown();
         }
     }
 }
