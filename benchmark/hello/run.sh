@@ -1,1 +1,0 @@
-java -cp "../jade.jar:./target/hello-1.0-SNAPSHOT.jar" jade.Boot -agents ElkowskiBadacz:com.jade.HelloWorldAgent

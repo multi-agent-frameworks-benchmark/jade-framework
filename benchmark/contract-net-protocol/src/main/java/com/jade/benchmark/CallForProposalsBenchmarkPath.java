@@ -33,8 +33,8 @@ public class CallForProposalsBenchmarkPath {
     private AgentContainer container;
     private CountDownLatch agentsFinishedLatch;
 
-//    @Param({"1", "2", "5", "10", "50", "100", "1000", "10000}) -- If you have strong PC
-    @Param({"1", "2", "4"})
+    @Param({"1", "2", "5", "10", "50", "100", "1000", "10000"}) // -- If you have strong PC
+//    @Param({"1"})
     private int numberOfContractorsAgentsInStarTopology;
 
     @Setup
@@ -58,7 +58,7 @@ public class CallForProposalsBenchmarkPath {
     @Benchmark
     @BenchmarkMode(Mode.SingleShotTime)
     @Measurement(iterations = 1)
-    @Fork(value = 4)
+    @Fork(value = 1)
     @OutputTimeUnit(TimeUnit.SECONDS)
     public void callForProposalBenchmarkPath() {
         try {

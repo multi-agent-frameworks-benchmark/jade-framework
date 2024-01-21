@@ -4,11 +4,9 @@ WORKDIR /app
 
 COPY . /app
 
-RUN ls
-
 RUN apt-get update
 RUN yes | apt install maven
 
 RUN mvn clean install
 
-CMD cd ./messaging; java -cp "../jade.jar:./target/messaging-1.0-SNAPSHOT.jar" jade.Boot -agents "CounterAgent:com.jade.system.CounterAgent;SenderAgent:com.jade.system.SenderAgent"
+CMD cd ./"$BENCHMARK_NAME"; java -jar "./target/$BENCHMARK_NAME-1.0-SNAPSHOT.jar"

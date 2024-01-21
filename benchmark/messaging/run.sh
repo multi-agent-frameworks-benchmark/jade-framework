@@ -1,1 +1,0 @@
-java -cp "../jade.jar:./target/messaging-1.0-SNAPSHOT.jar" jade.Boot -agents "CounterAgent:com.jade.CounterAgent;SenderAgent:com.jade.SenderAgent"

@@ -20,7 +20,7 @@ public class MessagingBenchmarkPath {
     private AgentContainer container;
     private CountDownLatch agentsFinishedLatch;
 
-//    @Param({"1000", "10000", "100000", "1000000"}) -- If you have strong CPU
+    // @Param({"1000", "10000", "100000", "1000000"}) -- If you have strong CPU
     @Param({"1000", "2000"})
     private int numberOfMessageTransfersInBothWays;
 
