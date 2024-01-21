@@ -14,7 +14,7 @@ public class App {
 
         Options options = new OptionsBuilder()
                 .include(HelloWorldBenchmarkPath.class.getSimpleName())
-                .output("../" + dateRun + "-benchmark-result-hello.txt")
+                .output("../../" + dateRun + "-benchmark-result-hello-jade.txt")
                 .resultFormat(ResultFormatType.TEXT)
                 .build();
 

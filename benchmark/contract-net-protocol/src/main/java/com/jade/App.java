@@ -14,7 +14,7 @@ public class App {
 
         Options options = new OptionsBuilder()
                 .include(CallForProposalsBenchmarkPath.class.getSimpleName())
-                .output("../" + dateRun + "-benchmark-result-contract-net-protocol.txt")
+                .output("../../" + dateRun + "-benchmark-result-contract-net-protocol-jade.txt")
                 .resultFormat(ResultFormatType.TEXT)
                 .build();
 

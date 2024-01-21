@@ -39,7 +39,7 @@ public class InitiatorAgent extends Agent {
             @Override
             public void action() {
                 MessageTemplate mt = MessageTemplate.MatchPerformative(ACLMessage.PROPOSE);
-                ACLMessage msg = receive(mt);
+                ACLMessage msg = blockingReceive(mt);
 
                 if (msg != null) {
                     System.out.println("Received proposal from " + msg.getSender().getName());

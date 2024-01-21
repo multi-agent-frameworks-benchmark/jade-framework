@@ -33,8 +33,8 @@ public class CallForProposalsBenchmarkPath {
     private AgentContainer container;
     private CountDownLatch agentsFinishedLatch;
 
-    @Param({"1", "2", "5", "10", "50", "100", "1000", "10000"}) // -- If you have strong PC
-//    @Param({"1"})
+    //@Param({"1", "2", "5", "10", "50", "100", "1000", "10000"}) // -- If you have strong PC
+    @Param({"100", "200", "300", "400", "500", "1000", "2000", "4000"})
     private int numberOfContractorsAgentsInStarTopology;
 
     @Setup
