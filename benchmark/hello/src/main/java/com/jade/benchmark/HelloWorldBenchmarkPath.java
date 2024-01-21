@@ -16,18 +16,15 @@ public class HelloWorldBenchmarkPath {
 
     private AgentContainer container;
 
-//    @Param({"1", "2", "5", "10", "50", "100", "1000", "10000}) -- If you have strong PC
-    @Param({"1", "3"})
+    @Param({"100", "200", "300", "400", "500", "1000", "1500", "2000", "2500", "3500", "5000", "7000", "8750", "10000"})
     private int numberOfAgentsCreated;
 
-    @Setup
     public void setup() {
         Runtime runtime = Runtime.instance();
         Profile profile = new ProfileImpl();
         container = runtime.createMainContainer(profile);
     }
 
-    @TearDown
     public void teardown() {
         try {
             container.kill();
@@ -38,13 +35,18 @@ public class HelloWorldBenchmarkPath {
 
     @Benchmark
     @BenchmarkMode(Mode.SingleShotTime)
-    @Measurement(iterations = 2)
-    @Fork(value = 4)
+    @Measurement(iterations = 1)
+    @Fork(value = 1)
     @OutputTimeUnit(TimeUnit.SECONDS)
     public void testHelloWorldAgent() {
+
+        setup();
+
         for (int i = 0; i < numberOfAgentsCreated; i++) {
             createHelloWorldAgent(i);
         }
+
+        teardown();
     }
 
     private void createHelloWorldAgent(int agentIndex) {

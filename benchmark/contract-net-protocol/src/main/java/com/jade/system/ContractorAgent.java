@@ -26,7 +26,7 @@ public class ContractorAgent extends Agent {
             @Override
             public void action() {
                 MessageTemplate mt = MessageTemplate.MatchPerformative(ACLMessage.CFP);
-                ACLMessage msg = receive(mt);
+                ACLMessage msg = blockingReceive(mt);
 
                 if (msg != null) {
                     handleProposal(msg, this.getAgent().getName());

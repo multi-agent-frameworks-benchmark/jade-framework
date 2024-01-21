@@ -35,7 +35,7 @@ public class SenderAgent extends Agent {
         @Override
         public void action() {
             sendUpdateMessage();
-            ACLMessage reply = receive();
+            ACLMessage reply = blockingReceive();
             processReply(reply);
         }
 
@@ -57,8 +57,8 @@ public class SenderAgent extends Agent {
         private void handleReceivedMessage(ACLMessage reply) {
             value = Integer.parseInt(reply.getContent());
 
-            System.out.println("Agent " + myAgent.getLocalName() + " received: " + value);
-
+            // System.out.println("Agent " + myAgent.getLocalName() + " received: " + value);
+                
             if (value >= receiveValueLimit) {
                 handleValueLimitReached();
             }

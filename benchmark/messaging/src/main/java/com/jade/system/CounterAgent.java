@@ -24,7 +24,7 @@ public class CounterAgent extends Agent {
     private class CounterBehaviour extends CyclicBehaviour {
         @Override
         public void action() {
-            ACLMessage msg = receive();
+            ACLMessage msg = blockingReceive();
             if (msg != null) {
                 processMessage(msg);
             } else {
@@ -50,7 +50,8 @@ public class CounterAgent extends Agent {
             int receivedValue = Integer.parseInt(msg.getContent());
             receivedValue++;
 
-            System.out.println("Agent " + myAgent.getLocalName() + " received: " + receivedValue);
+           // System.out.println("Agent " + myAgent.getLocalName() + " received: " + receivedValue);
+                
 
             if (receivedValue <= receiveValueLimit) {
                 sendIncrementedValue(msg, receivedValue);
